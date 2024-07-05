@@ -23,17 +23,6 @@ public class UserController {
         this.userService = userService;
     }
 
-/*    @GetMapping("admin/edit")
-    public String changeUser(@ModelAttribute("user") User user) {
-        return "editUser";
-    }
-
-    @PatchMapping("admin/edit{id}")
-    public String changeUser(@ModelAttribute("user") User user, Long id, String firstName, String lastName, String age, String email, String password) {
-        userService.changeUser(id, firstName, lastName, age, email, password);
-        return "redirect:/admin";
-    }*/
-
     @GetMapping("/login")
     public String loginPage() {
         return "login";
@@ -70,12 +59,6 @@ public class UserController {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
-
-/*    @PatchMapping("admin/edit/{id}")
-        public String changeUser(@PathVariable Long id, String firstName, String lastName, String age, String email, String password, @RequestParam List<Long> roles) {
-        userService.changeUser(id, firstName, lastName, age, email, password, roles);
-        return "redirect:/admin";
-    }*/
 
     @PatchMapping("admin/edit/{id}")
     public String changeUser(@PathVariable Long id, @ModelAttribute("user") User user) {
