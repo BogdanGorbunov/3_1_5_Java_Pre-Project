@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
+import ru.kata.spring.boot_security.demo.exceptionHandling.NoSuchUserException;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
@@ -61,7 +62,7 @@ public class UserService implements UserDetailsService {
 
     public boolean deleteUser(Long id) {
         if (userRepository.findById(id).isEmpty()) {
-            return false;
+            throw new NoSuchUserException("There is no user with ID = " + id + " in Database");
         }
         userRepository.deleteById(id);
         return true;
@@ -69,7 +70,7 @@ public class UserService implements UserDetailsService {
 
     public boolean changeUser(Long id, User user) {
         if (userRepository.findById(id).isEmpty()) {
-            return false;
+            throw new NoSuchUserException("There is no user with ID = " + id + " in Database");
         }
         if (!user.getPassword().isEmpty()) {
             userRepository.findById(id).get().setPassword(passwordEncoder.encode(user.getPassword()));
@@ -80,5 +81,12 @@ public class UserService implements UserDetailsService {
         userRepository.findById(id).get().setEmail(user.getEmail());
         userRepository.findById(id).get().setRoles(user.getRoles());
         return true;
+    }
+
+    public User findById(Long id) {
+        if (userRepository.findById(id).isEmpty()) {
+            throw new NoSuchUserException("There is no user with ID = " + id + " in Database");
+        }
+        return userRepository.findById(id).get();
     }
 }
